@@ -1,4 +1,5 @@
-# TTGO-LoRa32-V2.1-TTN
+# TTGO-LoRa32-V2.1-TTN (version T3_v1.6 20180606)
+
 TTGO LoRa32 V2.1 Sketch for TTN (The Things Network)
 
 This sketch has al the needed components to connect the board to The Things Network. I found a few sketches online based on the paxcounter but I didn't find it lean and mean. This sketch has also support for the oled display wich you can adjust to your needs.
