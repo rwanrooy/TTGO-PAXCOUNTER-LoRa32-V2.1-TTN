@@ -1,8 +1,8 @@
 /*
 
-TTGO T-BEAM Tracker for The Things Network
+TTGO LoRa32 V2.1 for The Things Network
 
-Copyright (C) 2018 by Xose Pérez <xose dot perez at gmail dot com>
+Copyright (C) 2019 by Roel van Wanrooy (www.connectix.nl)
 
 This code requires LMIC library by Matthijs Kooijman
 https://github.com/matthijskooijman/arduino-lmic
@@ -33,7 +33,7 @@ void ttn_register(void (*callback)(uint8_t message));
 // -----------------------------------------------------------------------------
 
 #define APP_NAME                "TTGO-LoRa32-1"
-#define APP_VERSION             "V1.0"
+#define APP_VERSION             "V1.0\n"
 
 // -----------------------------------------------------------------------------
 // Configuration
@@ -43,7 +43,7 @@ void ttn_register(void (*callback)(uint8_t message));
 #define DEBUG_PORT              Serial      // Serial debug port
 #define SERIAL_BAUD             115200      // Serial debug baud rate
 #define SLEEP_BETWEEN_MESSAGES  1           // Do sleep between messages
-#define SEND_INTERVAL           60000      // Sleep for these many millis
+#define SEND_INTERVAL           6000        // Sleep for these many millis
 #define MESSAGE_TO_SLEEP_DELAY  5000        // Time after message before going to sleep
 #define LOGO_DELAY              5000        // Time to show logo on first boot
 #define LORAWAN_PORT            10          // Port the messages will be sent to

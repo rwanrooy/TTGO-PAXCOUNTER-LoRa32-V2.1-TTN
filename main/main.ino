@@ -2,9 +2,7 @@
 
   Main module
 
-  # Modified by Kyle T. Gabriel to fix issue with incorrect GPS data for TTNMapper
-
-  Copyright (C) 2018 by Xose Pérez <xose dot perez at gmail dot com>
+  Copyright (C) 2019 by Roel van Wanrooy (www.connectix.nl)
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -23,7 +21,6 @@
 
 #include "configuration.h"
 #include "rom/rtc.h"
-//#include <TinyGPS++.h>
 #include <Wire.h>
 
 bool ssd1306_found = false;
@@ -31,22 +28,15 @@ bool ssd1306_found = false;
 // Message counter, stored in RTC memory, survives deep sleep
 RTC_DATA_ATTR uint32_t count = 0;
 
-//enter the length of the payload after the txbuffer and match this with the length in the sensor module
-static uint8_t txBuffer[1];
+//enter the length of the payload in bytes
+static uint8_t txBuffer[3];
 
 // -----------------------------------------------------------------------------
 // Application
 // -----------------------------------------------------------------------------
 
-
 void send() {
-  char buffer[20];
-  screen_print("Message sent\n");
   buildPacket(txBuffer);
-
-//{
-//    sleep();
-//  }
 
 #if LORAWAN_CONFIRMED_EVERY > 0
   bool confirmed = (count % LORAWAN_CONFIRMED_EVERY == 0);
@@ -56,9 +46,13 @@ void send() {
 
   ttn_cnt(count);
   ttn_send(txBuffer, sizeof(txBuffer), LORAWAN_PORT, confirmed);
-  digitalWrite(LED_PIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_PIN, LOW);
+  
+// Blink led while sending  
+ digitalWrite(LED_PIN, HIGH);
+ delay(1000);
+ digitalWrite(LED_PIN, LOW);
+
+// send count plus one 
   count++;
 }
 
@@ -76,9 +70,6 @@ void sleep() {
   // Turn off screen
   screen_off();
 
-//  Set the user button to wake the board (only if a button is present)
-//  sleep_interrupt(BUTTON_PIN, LOW);
-
   // We sleep for the interval between messages minus the current millis
   // this way we distribute the messages evenly every SEND_INTERVAL millis
   uint32_t sleep_for = (millis() < SEND_INTERVAL) ? SEND_INTERVAL - millis() : SEND_INTERVAL;
@@ -88,16 +79,20 @@ void sleep() {
 }
 
 void callback(uint8_t message) {
-  if (EV_JOINING == message) screen_print("Joining TTN...\n");
-  if (EV_JOINED == message) screen_print("TTN joined!\n");
-  if (EV_JOIN_FAILED == message) screen_print("TTN join failed\n");
-  if (EV_REJOIN_FAILED == message) screen_print("TTN rejoin failed\n");
-  if (EV_RESET == message) screen_print("Reset TTN connection\n");
-  if (EV_LINK_DEAD == message) screen_print("TTN link dead\n");
-  if (EV_ACK == message) screen_print("ACK received\n");
-  if (EV_PENDING == message) screen_print("Message discarded\n");
-  if (EV_QUEUED == message) screen_print("Message queued\n");
-  if (EV_TXCOMPLETE == message) screen_print("Message sent\n");
+  if (EV_JOINING == message) screen_print("Joining TTN...\n") , Serial.println("Joining TTN...\n");
+  if (EV_JOINED == message) screen_print("TTN joined!\n") , Serial.println("TTN joined!\n");
+  if (EV_JOIN_FAILED == message) screen_print("TTN join failed\n") , Serial.println("TTN join failed\n");
+  if (EV_REJOIN_FAILED == message) screen_print("TTN rejoin failed\n") , Serial.println("TTN rejoin failed\n");
+  if (EV_RESET == message) screen_print("Reset TTN connection\n") , Serial.println("Reset TTN connection\n");
+  if (EV_LINK_DEAD == message) screen_print("TTN link dead\n") , Serial.println("TTN link dead\n");
+  if (EV_ACK == message) screen_print("ACK received\n") , Serial.println("ACK received\n");
+  if (EV_PENDING == message) screen_print("Message discarded\n") , Serial.println("Message discarded\n");
+  if (EV_QUEUED == message) screen_print("Message queued\n") , Serial.println("Message queued\n");
+
+  if (EV_TXCOMPLETE == message) {
+    screen_print("Message sent\n") , Serial.println("Message sent\n");
+    sleep();
+  }
 
   if (EV_RESPONSE == message) {
 
@@ -120,6 +115,7 @@ uint32_t get_count() {
   return count;
 }
 
+// scan I2C bus for devices like ssd1306 oled
 void scanI2Cdevice(void)
 {
     byte err, addr;
@@ -153,35 +149,38 @@ void scanI2Cdevice(void)
 }
 
 void setup() {
-  // Debug
+// Debug
   #ifdef DEBUG_PORT
   DEBUG_PORT.begin(SERIAL_BAUD);
   #endif
 
-  delay(1000);
+//  delay(1000);
 
-  // LED
+// Scan for I2C devices
+  Wire.begin(I2C_SDA, I2C_SCL);
+  scanI2Cdevice();
+
+// LED
   pinMode(LED_PIN, OUTPUT);
 
-
-  // Display
+// Display
   screen_setup();
 
-  // Show logo on first boot
+// Show logo on first boot
   if (0 == count) {
-    screen_print(APP_NAME " " APP_VERSION, 0, 0);
+    screen_print(APP_NAME " " APP_VERSION, 0, 0 );
     screen_show_logo();
     screen_update();
     delay(LOGO_DELAY);
-  }
+}
 
-  // TTN setup
-  if (!ttn_setup()) {
-    screen_print("[ERR] Radio module not found!\n");
-    delay(MESSAGE_TO_SLEEP_DELAY);
-    screen_off();
-    sleep_forever();
-  }
+// TTN setup
+   if (!ttn_setup()) {
+   screen_print("[ERR] Radio module not found!\n");
+   delay(MESSAGE_TO_SLEEP_DELAY);
+   screen_off();
+   sleep_forever();
+}
 
   ttn_register(callback);
   ttn_join();
@@ -192,8 +191,7 @@ void setup() {
 void loop() {
   ttn_loop();
   screen_loop();
-
   // Send every SEND_INTERVAL millis
-    send();
+  send();
   delay(SEND_INTERVAL);
 }
