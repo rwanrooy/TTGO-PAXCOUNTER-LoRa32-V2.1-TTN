@@ -191,7 +191,14 @@ void setup() {
 void loop() {
   ttn_loop();
   screen_loop();
-  // Send every SEND_INTERVAL millis
-  send();
-  delay(SEND_INTERVAL);
+
+// Send every SEND_INTERVAL millis
+  static uint32_t last = 0;
+  static bool first = true;
+  if (0 == last || millis() - last > SEND_INTERVAL) {
+      last = millis();
+      first = false;
+      Serial.println("TRANSMITTING");
+      send();
+  }
 }
