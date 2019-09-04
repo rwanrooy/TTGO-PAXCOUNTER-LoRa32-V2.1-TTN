@@ -31,6 +31,9 @@ RTC_DATA_ATTR uint32_t count = 0;
 //enter the length of the payload in bytes
 static uint8_t txBuffer[3];
 
+//downlink payload
+static uint8_t rxBuffer[1];
+
 // -----------------------------------------------------------------------------
 // Application
 // -----------------------------------------------------------------------------
@@ -48,9 +51,9 @@ void send() {
   ttn_send(txBuffer, sizeof(txBuffer), LORAWAN_PORT, confirmed);
   
 // Blink led while sending  
- digitalWrite(LED_PIN, HIGH);
- delay(1000);
- digitalWrite(LED_PIN, LOW);
+// digitalWrite(LED_PIN, HIGH);
+// delay(1000);
+// digitalWrite(LED_PIN, LOW);
 
 // send count plus one 
   count++;
@@ -90,7 +93,34 @@ void callback(uint8_t message) {
   if (EV_QUEUED == message) screen_print("Message queued\n") , Serial.println("Message queued\n");
 
   if (EV_TXCOMPLETE == message) {
-    screen_print("Message sent\n") , Serial.println("Message sent\n");
+    screen_print("Message sent\n") , Serial.println(F("EV_TXCOMPLETE (includes waiting for RX windows)"));
+    if (LMIC.txrxFlags & TXRX_ACK)
+              Serial.println(F("Received ack"));
+            if (LMIC.dataLen) {
+              Serial.print(F("Received "));
+              Serial.print(LMIC.dataLen);
+              Serial.println(F(" bytes of payload"));
+        for (int i = 0; i < LMIC.dataLen; i++) {
+          if (LMIC.frame[LMIC.dataBeg + i] < 0x10) {
+            Serial.print(F("0"));
+        }
+        Serial.print(F("Received payload: "));
+        Serial.print(LMIC.frame[LMIC.dataBeg + i], HEX);
+    }
+    Serial.println();
+
+// downlink (turn led on when received payload = 1)
+  if (LMIC.frame[LMIC.dataBeg] == 1)
+  {
+    digitalWrite(LED_PIN, HIGH);
+  }
+  else
+  {
+    digitalWrite(LED_PIN, LOW);
+  }
+
+            
+            }
     sleep();
   }
 
