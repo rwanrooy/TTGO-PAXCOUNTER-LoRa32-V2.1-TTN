@@ -8,6 +8,8 @@ This sketch has al the needed components to connect the board to The Things Netw
 
 You can turn a relais on or off by sending downlink messages in the TTN Console. I added some payload formats (Decider, Converter, Validator and Encoder) to make the payload more easy to read. This is also necessary if you want to control the relais with Node-Red.
 
+![alt text](https://github.com/rwanrooy/TTGO-PAXCOUNTER-LoRa32-V2.1-TTN/blob/master/img/node%20red%20workflow.png)
+
 Downlink confirmation:
 The sketch confirms the state of the relais with uplink messages so you are always sure the message is transmitted to the node. I will add some node red instructions later when I have more time.
 
