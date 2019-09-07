@@ -24,11 +24,12 @@
 #include <Wire.h>
 
 bool ssd1306_found = false;
+bool relais_on = false;
 
 // Message counter, stored in RTC memory, survives deep sleep
 RTC_DATA_ATTR uint32_t count = 0;
 
-//enter the length of the payload in bytes
+//enter the length of the payload in bytes (this has to be more than 3 if you want to receive downlinks)
 static uint8_t txBuffer[3];
 
 //downlink payload
@@ -52,7 +53,11 @@ void send() {
   
 // Blink led while sending  
 // digitalWrite(LED_PIN, HIGH);
-// delay(1000);
+// delay(50);
+// digitalWrite(LED_PIN, LOW);
+// delay(100);
+// digitalWrite(LED_PIN, HIGH);
+// delay(50);
 // digitalWrite(LED_PIN, LOW);
 
 // send count plus one 
@@ -109,18 +114,20 @@ void callback(uint8_t message) {
     }
     Serial.println();
 
-// downlink (turn led on when received payload = 1)
+// downlink (turn relais on when received payload = 1)
   if (LMIC.frame[LMIC.dataBeg] == 1)
   {
-    digitalWrite(LED_PIN, HIGH);
+    digitalWrite(RELAIS_PIN, HIGH);
+    Serial.println("RELAIS ON");
+    relais_on = true;
   }
   else
   {
-    digitalWrite(LED_PIN, LOW);
+    digitalWrite(RELAIS_PIN, LOW);
+    Serial.println("RELAIS OFF");
+    relais_on = false;
   }
-
-            
-            }
+  }
     sleep();
   }
 
@@ -190,8 +197,11 @@ void setup() {
   Wire.begin(I2C_SDA, I2C_SCL);
   scanI2Cdevice();
 
-// LED
+// SET BUILT-IN LED TO OUTPUT
   pinMode(LED_PIN, OUTPUT);
+
+// SET RELAIS_PIN TO OUTPUT
+  pinMode(RELAIS_PIN, OUTPUT);
 
 // Display
   screen_setup();

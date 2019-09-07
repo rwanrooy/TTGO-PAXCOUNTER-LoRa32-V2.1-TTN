@@ -39,6 +39,12 @@ void ttn_register(void (*callback)(uint8_t message));
 // Configuration
 // -----------------------------------------------------------------------------
 
+// If using a single-channel gateway, uncomment this next option and set to your gateway's channel
+//#define SINGLE_CHANNEL_GATEWAY  0
+
+// If you are having difficulty sending messages to TTN after the first successful send,
+// uncomment the next option and experiment with values (~ 1 - 5)
+#define CLOCK_ERROR             1
 
 #define DEBUG_PORT              Serial      // Serial debug port
 #define SERIAL_BAUD             115200      // Serial debug baud rate
@@ -77,6 +83,7 @@ void ttn_register(void (*callback)(uint8_t message));
 #define I2C_SDA         21
 #define I2C_SCL         22
 #define LED_PIN         25
+#define RELAIS_PIN      14  // confirmed pin 14 works with board
 
 // -----------------------------------------------------------------------------
 // OLED

@@ -1,7 +1,12 @@
-//char t[32]; // used to sprintf for Serial output
+// Building payload from sensordata
     void buildPacket(uint8_t txBuffer[3])
     {
-        txBuffer[0] = ( 11 ) & 0xFF;
-        txBuffer[1] = ( 01 ) & 0xFF;        
-        txBuffer[0] = ( 02 ) & 0xFF;
+  if (relais_on == true)
+  {
+    txBuffer[0] = ( 01 ) & 0xFF;
+  }
+  else
+  {
+    txBuffer[0] = ( 00 ) & 0xFF;
+  }
     }

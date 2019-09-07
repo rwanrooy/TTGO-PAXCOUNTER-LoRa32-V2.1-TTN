@@ -39,15 +39,17 @@ void _screen_header() {
     display->setTextAlignment(TEXT_ALIGN_LEFT);
     display->drawString(0, 2, buffer);
 
-//    // Datetime
-//    gps_time(buffer, sizeof(buffer));
-//    display->setTextAlignment(TEXT_ALIGN_CENTER);
-//    display->drawString(display->getWidth()/2, 2, buffer);
-
-//    // Satellite count
-//    display->setTextAlignment(TEXT_ALIGN_RIGHT);
-//    display->drawString(display->getWidth() - SATELLITE_IMAGE_WIDTH - 4, 2, itoa(gps_sats(), buffer, 10));
-//    display->drawXbm(display->getWidth() - SATELLITE_IMAGE_WIDTH, 0, SATELLITE_IMAGE_WIDTH, SATELLITE_IMAGE_HEIGHT, SATELLITE_IMAGE);
+//  RELAIS STATUS
+  if (relais_on == true)
+  {
+    display->setTextAlignment(TEXT_ALIGN_LEFT);
+    display->drawString(65, 2, ("RELAIS ON"));
+  }
+  else
+  {
+    display->setTextAlignment(TEXT_ALIGN_LEFT);
+    display->drawString(65, 2, ("RELAIS OFF"));
+  }
 }
 
 void screen_show_logo() {

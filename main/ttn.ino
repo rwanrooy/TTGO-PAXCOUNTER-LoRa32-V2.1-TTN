@@ -117,6 +117,10 @@ void ttn_join() {
     // Reset the MAC state. Session and pending data transfers will be discarded.
     LMIC_reset();
 
+    #ifdef CLOCK_ERROR
+    LMIC_setClockError(MAX_CLOCK_ERROR * CLOCK_ERROR / 100);
+    #endif
+
     #ifdef USE_ABP
 
         // Set static session parameters. Instead of dynamically establishing a session
