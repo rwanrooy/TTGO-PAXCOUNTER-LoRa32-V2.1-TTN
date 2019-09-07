@@ -1,10 +1,15 @@
 # TTGO-LoRa32-V2.1-TTN (version T3_v1.6 20180606)
 
-TTGO LoRa32 V2.1 Sketch for TTN (The Things Network)
+TTGO LoRa32 V2.1 Sketch for TTN (The Things Network) with downlink control for turning a relais off or on.
 
 ![alt text](https://github.com/rwanrooy/TTGO-LoRa32-V2.1-TTN/blob/master/img/ttgo%20lora32%20board.png)
 
 This sketch has al the needed components to connect the board to The Things Network. I found a few sketches online based on the paxcounter but I didn't find them lean and mean. This sketch has also support for the oled display wich you can adjust to your needs.
+
+You can turn a relais on or off by sending downlink messages in the TTN Console. I added some payload formats (Decider, Converter, Validator and Encoder) to make the payload more easy to read. This is also necessary if you want to control the relais with Node-Red.
+
+Downlink confirmation:
+The sketch confirms the state of the relais with uplink messages so you are always sure the message is transmitted to the node. I will add some node red instructions later when I have more time.
 
 
 Setup
@@ -27,9 +32,8 @@ Install the Arduino IDE libraries:
 
 The default configuration will upload the payload every 10 minutes to the TTN Application console. You can adjust the payload to work with a sensor of choice. I will update the sketch with a temperature sensor in the near future.
 
-The sketch is configured to receive downlink messages. You can use the TTN console to send a payload to the board. The payload will be scheduled and send when the board sends the first new uplink message to TTN. The sketch is configured to blink the green led when it receives a payload of 01. If you send another payload than 01 the led will turn off. You can assign another DIO pin as an output to a relays to turn on a motor or another device of choice.
+You can connect a relais to pin 14 (I can confirm it works). You have to connect the 5V pin and the ground on the right side of the board (opposit side of pin 14). I did not get the left side of the voltage and ground to work with pin 14.
 
-You can use the sensor tab to fill the payload with data of a sensor of your own. The payload is now set to 11 for testing purposes.
 
 Work is still in progress and testing has to be done.
 
