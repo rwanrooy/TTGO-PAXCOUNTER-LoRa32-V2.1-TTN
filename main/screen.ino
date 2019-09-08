@@ -50,6 +50,7 @@ void _screen_header() {
     display->setTextAlignment(TEXT_ALIGN_LEFT);
     display->drawString(65, 2, ("RELAIS OFF"));
   }
+
 }
 
 void screen_show_logo() {

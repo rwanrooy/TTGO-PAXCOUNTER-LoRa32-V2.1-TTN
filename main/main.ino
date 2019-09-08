@@ -49,17 +49,18 @@ void send() {
 #endif
 
   ttn_cnt(count);
+
+// Blink led while sending  
+  digitalWrite(LED_PIN, HIGH);
+  delay(50);
+  digitalWrite(LED_PIN, LOW);
+  delay(100);
+  digitalWrite(LED_PIN, HIGH);
+  delay(50);
+  digitalWrite(LED_PIN, LOW);
+  
   ttn_send(txBuffer, sizeof(txBuffer), LORAWAN_PORT, confirmed);
   
-// Blink led while sending  
-// digitalWrite(LED_PIN, HIGH);
-// delay(50);
-// digitalWrite(LED_PIN, LOW);
-// delay(100);
-// digitalWrite(LED_PIN, HIGH);
-// delay(50);
-// digitalWrite(LED_PIN, LOW);
-
 // send count plus one 
   count++;
 }

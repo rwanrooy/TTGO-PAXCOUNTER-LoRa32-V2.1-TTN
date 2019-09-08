@@ -80,10 +80,10 @@ void ttn_register(void (*callback)(uint8_t message));
 // General
 // -----------------------------------------------------------------------------
 
-#define I2C_SDA         21
-#define I2C_SCL         22
-#define LED_PIN         25
-#define RELAIS_PIN      14  // confirmed pin 14 works with board
+#define I2C_SDA            21
+#define I2C_SCL            22
+#define LED_PIN            25
+#define RELAIS_PIN         14    // confirmed pin 14 works with board
 
 // -----------------------------------------------------------------------------
 // OLED
