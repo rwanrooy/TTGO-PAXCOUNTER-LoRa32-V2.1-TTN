@@ -1,4 +1,4 @@
-# TTGO-LoRa32-V2.1-TTN (version T3_v1.6 20180606)
+# TTGO PAXCOUNTER (LoRa32-V2.1-TTN version T3_v1.6 20180606)
 
 TTGO LoRa32 V2.1 Sketch for TTN (The Things Network) with downlink control for turning a relais off or on.
 
