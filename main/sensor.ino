@@ -98,14 +98,14 @@ void buildPacket(uint8_t txBuffer[7])
 
   float pressure = bme.readPressure();
 
-  sprintf(bme_char, "Pressure: %f", pressure);
+  sprintf(bme_char, "Pressure: %f", pressure / 100);
   Serial.println(bme_char);
 
-  snprintf(buffer, sizeof(buffer), "Pressure: %10.1f\n", pressure);
+  snprintf(buffer, sizeof(buffer), "Pressure: %10.1f\n", pressure / 100);
   screen_print(buffer);
 
   // adjust for the f2sflt16 range (-1 to 1)
-  pressure = pressure / 100000;
+  pressure = pressure / 10000000;
 
   // float -> int
   uint16_t payloadPress = LMIC_f2sflt16(pressure);
