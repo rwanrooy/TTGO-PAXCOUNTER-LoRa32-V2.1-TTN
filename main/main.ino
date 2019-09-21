@@ -24,13 +24,14 @@
 #include <Wire.h>
 
 bool ssd1306_found = false;
+bool bmp280_found = false;
 bool relais_on = false;
 
 // Message counter, stored in RTC memory, survives deep sleep
 RTC_DATA_ATTR uint32_t count = 0;
 
 //enter the length of the payload in bytes (this has to be more than 3 if you want to receive downlinks)
-static uint8_t txBuffer[3];
+static uint8_t txBuffer[7];
 
 //downlink payload
 static uint8_t rxBuffer[1];
@@ -173,6 +174,10 @@ void scanI2Cdevice(void)
                 ssd1306_found = true;
                 Serial.println("ssd1306 display found");
             }
+            if (addr == BMP280_ADDRESS) {
+                bmp280_found = true;
+                Serial.println("bmp280 sensor found");
+            }
         } else if (err == 4) {
             Serial.print("Unknow error at address 0x");
             if (addr < 16)
@@ -207,6 +212,9 @@ void setup() {
 // Display
   screen_setup();
 
+// Init BME280
+  bme_setup();
+
 // Show logo on first boot
   if (0 == count) {
     screen_print(APP_NAME " " APP_VERSION, 0, 0 );
@@ -229,10 +237,13 @@ void setup() {
   ttn_adr(LORAWAN_ADR);
 }
 
+
+
 void loop() {
   ttn_loop();
   screen_loop();
-
+//  bme_loop();
+  
 // Send every SEND_INTERVAL millis
   static uint32_t last = 0;
   static bool first = true;
