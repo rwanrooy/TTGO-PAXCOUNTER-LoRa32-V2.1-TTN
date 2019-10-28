@@ -1,17 +1,17 @@
 # TTGO PAXCOUNTER (LoRa32-V2.1-TTN version T3_v1.6 20180606)
 
-TTGO LoRa32 V2.1 Sketch for TTN (The Things Network) with downlink control for turning a relais off or on. This Sketch has support for a BME280 Temperature, Hunidity and Pressure sensor. You can connect the BME sensor to the I2C bus.
-
-![alt text](https://github.com/rwanrooy/TTGO-LoRa32-V2.1-TTN/blob/master/img/ttgo%20lora32%20board.png)
+TTGO LoRa32 V2.1 Sketch for TTN (The Things Network) with downlink control for turning a relais off or on. This Sketch has support for a BME280 Temperature, Hunidity and Pressure sensor.
 
 This sketch has al the needed components to connect the board to The Things Network. I found a few sketches online based on the paxcounter but I didn't find them lean and mean. This sketch has also support for the oled display wich you can adjust to your needs.
 
 You can turn a relais on or off by sending downlink messages in the TTN Console. I added some payload formats (Decider, Converter, Validator and Encoder) to make the payload more easy to read. This is also necessary if you want to control the relais with Node-Red.
 
+![alt text](https://github.com/rwanrooy/TTGO-LoRa32-V2.1-TTN/blob/master/img/ttgo%20lora32%20board.png)
+
 ![alt text](https://github.com/rwanrooy/TTGO-PAXCOUNTER-LoRa32-V2.1-TTN/blob/master/img/node%20red%20workflow.png)
 
 Downlink confirmation:
-The sketch confirms the state of the relais with uplink messages so you are always sure the message is transmitted to the node. I will add some node red instructions later when I have more time.
+The sketch confirms the state of the relais with uplink messages so you are always sure the message is transmitted to the node. I will add some node red instructions later when I have more time. With every update the board sends the sensor data from the BME Temperature, Humidity and Pressure sensor to TTN.
 
 
 Setup
