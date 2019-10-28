@@ -1,6 +1,6 @@
 # TTGO PAXCOUNTER (LoRa32-V2.1-TTN version T3_v1.6 20180606)
 
-TTGO LoRa32 V2.1 Sketch for TTN (The Things Network) with downlink control for turning a relais off or on.
+TTGO LoRa32 V2.1 Sketch for TTN (The Things Network) with downlink control for turning a relais off or on. This Sketch has support for a BME280 Temperature, Hunidity and Pressure sensor. You can connect the BME sensor to the I2C bus.
 
 ![alt text](https://github.com/rwanrooy/TTGO-LoRa32-V2.1-TTN/blob/master/img/ttgo%20lora32%20board.png)
 
